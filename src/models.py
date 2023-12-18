@@ -20,7 +20,7 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
 
-
+    
 class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String(250), nullable=False)
@@ -40,4 +40,23 @@ class Character(db.Model):
             "mass": self.mass,
             "hair_color": self.hair_color,
             "skin_color": self.skin_color,
+        }
+
+class Planet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name =  db.Column(db.String(250), nullable=False)
+    population = db.Column(db.Integer, nullable=False)
+    terrain = db.Column(db.String(250), nullable=False)
+    climate = db.Column(db.String(250), nullable=False)  
+
+    def __repr__(self):
+        return '<Planet %r>' % self.name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "population": self.population,
+            "terrain": self.terrain,
+            "climate": self.climate,
         }

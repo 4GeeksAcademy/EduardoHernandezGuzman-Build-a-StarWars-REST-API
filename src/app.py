@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, Userde , Character, Planet
+from models import db, User , Character, Planet
 #from models import Person
 
 app = Flask(__name__)
@@ -42,6 +42,8 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+
+
 #Traer a los User
 @app.route('/user', methods=['GET'])
 def get_user():
@@ -52,6 +54,17 @@ def get_user():
         return jsonify(message="No se han encontrado users"), 404
 
     return jsonify(resultados), 200
+
+#Traer a un usuario concreto
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_user2(user_id):
+    user = User.query.get(user_id)  # Obtener un usuario por su ID
+
+    if user is None:
+        return jsonify(message="Usuario no encontrado"), 404
+
+    return jsonify(user.serialize()), 200
+
 
 
 #Traer a los Character
@@ -65,6 +78,19 @@ def get_character():
 
     return jsonify(resultados), 200
 
+#Traer a un character concreto
+@app.route('/character/<int:character_id>', methods=['GET'])
+def get_character2(character_id):
+    character = Character.query.get(character_id)  
+
+    if character is None:
+        return jsonify(message="Personaje no encontrado"), 404
+
+    return jsonify(character.serialize()), 200
+
+
+
+
 #Traer a los Planet
 @app.route('/planet', methods=['GET'])
 def get_planet():
@@ -75,6 +101,20 @@ def get_planet():
         return jsonify(message="No se han encontrado planets"), 404
 
     return jsonify(resultados), 200
+
+#Traer a un planet concreto
+@app.route('/planet/<int:planet_id>', methods=['GET'])
+def get_planet2(planet_id):
+    planet = Planet.query.get(planet_id)  
+
+    if planet is None:
+        return jsonify(message="Planeta no encontrado"), 404
+
+    return jsonify(planet.serialize()), 200
+
+
+
+
 
 
 

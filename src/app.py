@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Character, Planet
 #from models import Person
 
 app = Flask(__name__)
@@ -42,19 +42,39 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-
+#Traer a los User
 @app.route('/user', methods=['GET'])
 def get_user():
     users = User.query.all()
     resultados = list(map(lambda item: item.serialize(), users))
     
-   
-    response_body = {
-        "msg": "Aquí me está trayendo los usuarios",
-        
-    }
+    if not users:
+        return jsonify(message="No se han encontrado users"), 404
 
-    return jsonify(resultados ), 200
+    return jsonify(resultados), 200
+
+
+#Traer a los Character
+@app.route('/character', methods=['GET'])
+def get_character():
+    characters = Character.query.all() 
+    resultados = list(map(lambda item: item.serialize(), characters))
+    
+    if not characters:
+        return jsonify(message="No se han encontrado character"), 404
+
+    return jsonify(resultados), 200
+
+#Traer a los Planet
+@app.route('/planet', methods=['GET'])
+def get_planet():
+    planets = Planet.query.all() 
+    resultados = list(map(lambda item: item.serialize(), planets))
+    
+    if not planets:
+        return jsonify(message="No se han encontrado planets"), 404
+
+    return jsonify(resultados), 200
 
 
 

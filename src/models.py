@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 
 
-#############################USUARIOS###################################
+############################# USUARIOS ###################################
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=False)
@@ -28,7 +28,7 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
 
-#############################PERSONAJES################################### 
+############################# PERSONAJES ################################### 
 class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String(250), nullable=False)
@@ -63,7 +63,7 @@ class Character_fav(db.Model):
     character = db.relationship("Character", back_populates="character_fav")
 
 
-#############################PLANETAS###################################
+############################# PLANETAS ###################################
 class Planet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String(250), nullable=False)

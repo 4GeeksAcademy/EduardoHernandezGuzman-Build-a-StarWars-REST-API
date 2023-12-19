@@ -33,10 +33,6 @@ def handle_invalid_usage(error):
 
 
 
-
-
-
-
 # generate sitemap with all your endpoints
 @app.route('/')
 def sitemap():
@@ -44,6 +40,7 @@ def sitemap():
 
 
 
+############################# METODO GET ###################################
 #Traer a los User
 @app.route('/user', methods=['GET'])
 def get_user():
@@ -58,12 +55,32 @@ def get_user():
 #Traer a un usuario concreto
 @app.route('/user/<int:user_id>', methods=['GET'])
 def get_user2(user_id):
-    user = User.query.get(user_id)  # Obtener un usuario por su ID
+    user = User.query.get(user_id)  
 
     if user is None:
         return jsonify(message="Usuario no encontrado"), 404
 
     return jsonify(user.serialize()), 200
+
+#Traer a los favoritos de un usuario
+@app.route('/user/favorites', methods=['GET'])
+def get_user_fav():
+    
+    users = User.query.all()
+    
+    user_favorites = []
+    
+    for user in users:
+        user_favorites.append({
+            "user_id": user.id,
+            "username": user.username,
+            "character_favorites": [character_fav.character.serialize() for character_fav in user.character_fav],
+            "planet_favorites": [planet_fav.planet.serialize() for planet_fav in user.planet_fav]
+        })
+    
+    return jsonify(user_favorites), 200
+
+
 
 
 
@@ -111,6 +128,9 @@ def get_planet2(planet_id):
         return jsonify(message="Planeta no encontrado"), 404
 
     return jsonify(planet.serialize()), 200
+
+
+
 
 
 

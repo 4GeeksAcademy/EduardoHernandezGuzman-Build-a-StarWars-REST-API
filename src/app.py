@@ -43,19 +43,18 @@ def sitemap():
     return generate_sitemap(app)
 
 
-
 @app.route('/user', methods=['GET'])
 def get_user():
     users = User.query.all()
-
-    print(users)
-
+    resultados = list(map(lambda item: item.serialize(), users))
+    
+   
     response_body = {
-        "msg": "Aquí me está trayendo los usuarios"
+        "msg": "Aquí me está trayendo los usuarios",
+        
     }
 
-    return jsonify(response_body), 200
-
+    return jsonify(resultados ), 200
 
 
 

@@ -153,6 +153,34 @@ def get_planet_fav():
 
 ############################# METODO POST ###################################
 
+#Crear nuevo User 
+@app.route('/user', methods=['POST'])
+def add_new_user():
+    request_body_user = request.get_json()
+
+   
+    if (
+        "email" not in request_body_user
+        or "password" not in request_body_user
+        or "username" not in request_body_user
+    ):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    new_user = User(
+        username=request_body_user["username"],
+        email=request_body_user["email"],
+        password=request_body_user["password"],
+        is_active=request_body_user["is_active"]
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    response_body = {
+        "msg": "Nuevo user añadido exitosamente"
+    }
+
+    return jsonify(response_body), 200
 
 
 #Crear nuevo Character
@@ -186,6 +214,36 @@ def add_new_character():
 
     return jsonify(response_body), 200
 
+#Crear nuevo character_fav
+@app.route('/character_fav', methods=['POST'])
+def add_new_character_fav():
+    request_body_fav_character = request.get_json()
+
+
+    if (
+        "character_id" not in request_body_fav_character
+        or "user_id" not in request_body_fav_character
+    ):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    
+    new_fav_character = Character_fav(
+        character_id=request_body_fav_character["character_id"],
+        user_id=request_body_fav_character["user_id"]
+    )
+    
+   
+    db.session.add(new_fav_character)
+    db.session.commit()
+
+    response_body = {
+        "msg": "Nuevo character_fav añadido exitosamente"
+    }
+
+    return jsonify(response_body), 200
+
+
+
 
 #Crear nuevo Planet
 @app.route('/planet', methods=['POST'])
@@ -217,35 +275,6 @@ def add_new_planet():
     return jsonify(response_body), 200
 
 
-
-#Crear nuevo character_fav
-@app.route('/character_fav', methods=['POST'])
-def add_new_character_fav():
-    request_body_fav_character = request.get_json()
-
-
-    if (
-        "character_id" not in request_body_fav_character
-        or "user_id" not in request_body_fav_character
-    ):
-        return jsonify({"error": "Datos incompletos"}), 400
-
-    
-    new_fav_character = Character_fav(
-        character_id=request_body_fav_character["character_id"],
-        user_id=request_body_fav_character["user_id"]
-    )
-    
-   
-    db.session.add(new_fav_character)
-    db.session.commit()
-
-    response_body = {
-        "msg": "Nuevo character_fav añadido exitosamente"
-    }
-
-    return jsonify(response_body), 200
-
 #Crear nuevo planet_fav
 @app.route('/planet_fav', methods=['POST'])
 def add_new_planet_fav():
@@ -273,6 +302,15 @@ def add_new_planet_fav():
     }
 
     return jsonify(response_body), 200
+
+
+
+############################# METODO DELETE ###################################
+
+
+
+
+#Aquí el código
 
 
 

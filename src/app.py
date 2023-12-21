@@ -40,9 +40,14 @@ def sitemap():
 
 
 
+
+
+
 ############################# METODO GET ###################################
 
-#Traer a los User
+            ######usuarios######
+
+#######Traer a los User#######
 @app.route('/user', methods=['GET'])
 def get_user():
     users = User.query.all()
@@ -53,7 +58,7 @@ def get_user():
 
     return jsonify(resultados), 200
 
-#Traer a un usuario concreto
+#######Traer a un usuario concreto#######
 @app.route('/user/<int:user_id>', methods=['GET'])
 def get_user2(user_id):
     user = User.query.get(user_id)  
@@ -63,7 +68,7 @@ def get_user2(user_id):
 
     return jsonify(user.serialize()), 200
 
-#Traer a los favoritos de un usuario
+#######Traer a los favoritos de un usuario#######
 @app.route('/user/favorites', methods=['GET'])
 def get_user_fav():
     
@@ -82,8 +87,9 @@ def get_user_fav():
     return jsonify(user_favorites), 200
 
 
+            ######personajes######
 
-#Traer a los Character
+#######Traer a los Character#######
 @app.route('/character', methods=['GET'])
 def get_character():
     characters = Character.query.all() 
@@ -94,7 +100,7 @@ def get_character():
 
     return jsonify(resultados), 200
 
-#Traer a un character concreto
+#######Traer a un character concreto#######
 @app.route('/character/<int:character_id>', methods=['GET'])
 def get_character2(character_id):
     character = Character.query.get(character_id)  
@@ -104,7 +110,7 @@ def get_character2(character_id):
 
     return jsonify(character.serialize()), 200
 
-#Traer a los Character_fav
+#######Traer a los Character_fav#######
 @app.route('/character_fav', methods=['GET'])
 def get_character_fav():
     characters_fav = Character_fav.query.all() 
@@ -116,8 +122,9 @@ def get_character_fav():
     return jsonify(resultados), 200
 
 
+            ######planetas######
 
-#Traer a los Planet
+#######Traer a los Planet#######
 @app.route('/planet', methods=['GET'])
 def get_planet():
     planets = Planet.query.all() 
@@ -128,7 +135,7 @@ def get_planet():
 
     return jsonify(resultados), 200
 
-#Traer a un planet concreto
+#######Traer a un planet concreto#######
 @app.route('/planet/<int:planet_id>', methods=['GET'])
 def get_planet2(planet_id):
     planet = Planet.query.get(planet_id)  
@@ -138,7 +145,7 @@ def get_planet2(planet_id):
 
     return jsonify(planet.serialize()), 200
 
-#Traer a los Planet_fav
+#######Traer a los Planet_fav#######
 @app.route('/planet_fav', methods=['GET'])
 def get_planet_fav():
     planets_fav = Planet_fav.query.all() 
@@ -153,7 +160,9 @@ def get_planet_fav():
 
 ############################# METODO POST ###################################
 
-#Crear nuevo User 
+            ######usuarios######
+
+#######Crear nuevo User #######
 @app.route('/user', methods=['POST'])
 def add_new_user():
     request_body_user = request.get_json()
@@ -183,7 +192,9 @@ def add_new_user():
     return jsonify(response_body), 200
 
 
-#Crear nuevo Character
+            ######personajes######
+
+#######Crear nuevo Character#######
 @app.route('/character', methods=['POST'])
 def add_new_character():
     body = request.get_json()
@@ -214,7 +225,7 @@ def add_new_character():
 
     return jsonify(response_body), 200
 
-#Crear nuevo character_fav
+#######Crear nuevo character_fav#######
 @app.route('/character_fav', methods=['POST'])
 def add_new_character_fav():
     request_body_fav_character = request.get_json()
@@ -243,9 +254,9 @@ def add_new_character_fav():
     return jsonify(response_body), 200
 
 
+            ######planetas######
 
-
-#Crear nuevo Planet
+#######Crear nuevo Planet#######
 @app.route('/planet', methods=['POST'])
 def add_new_planet():
     body = request.get_json()
@@ -275,7 +286,7 @@ def add_new_planet():
     return jsonify(response_body), 200
 
 
-#Crear nuevo planet_fav
+#######Crear nuevo planet_fav#######
 @app.route('/planet_fav', methods=['POST'])
 def add_new_planet_fav():
     request_body_fav_planet = request.get_json()
@@ -307,26 +318,79 @@ def add_new_planet_fav():
 
 ############################# METODO DELETE ###################################
 
+            ######usuarios######
+
+#######Eliminar un user concreto#######
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({'message': "User no encontrado"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({'message': f'User con id {user_id} ha sido borrado'}), 200
 
 
+            ######planetas######
 
-#Aquí el código
+#######Eliminar un planet concreto#######
+@app.route('/planet/<int:planet_id>', methods=['DELETE'])
+def delete_planet(planet_id):
+    planet = Planet.query.get(planet_id)
 
+    if not planet:
+        return jsonify({'message': "Planeta no encontrado"}), 404
 
+    db.session.delete(planet)
+    db.session.commit()
 
-
-
-
-
-
-
-
-
-
-
-
+    return jsonify({'message': f'Planeta con id {planet_id} ha sido borrado'}), 200
 
 
+#######Eliminar uu Planet_fav concreto#######
+@app.route('/planet_fav/<int:planet_fav_id>', methods=['DELETE'])
+def delete_planet_fav(planet_fav_id):
+    planet_fav = Planet_fav.query.get(planet_fav_id)
+
+    if not planet_fav:
+        return jsonify({'message': "Entrada de Planet_fav no encontrada"}), 404
+
+    db.session.delete(planet_fav)
+    db.session.commit()
+
+    return jsonify({'message': f'Entrada de Planet_fav con ID {planet_fav_id} ha sido borrada'}), 200
+
+
+            ######personajes######
+
+#######Eliminar un character concreto#######
+@app.route('/character/<int:character_id>', methods=['DELETE'])
+def delete_character(character_id):
+    character = Character.query.get(character_id)
+
+    if not character:
+        return jsonify({'message': "Personaje no encontrado"}), 404
+
+    db.session.delete(character)
+    db.session.commit()
+
+    return jsonify({'message': f'Personaje con id {character_id} ha sido borrado'}), 200
+
+#######Eliminar uu Character_fav concreto#######
+@app.route('/character_fav/<int:character_fav_id>', methods=['DELETE'])
+def delete_character_fav(character_fav_id):
+    character_fav = Character_fav.query.get(character_fav_id)
+
+    if not character_fav:
+        return jsonify({'message': "Entrada de Character_fav no encontrada"}), 404
+
+    db.session.delete(character_fav)
+    db.session.commit()
+
+    return jsonify({'message': f'Entrada de Character_fav con ID {character_fav_id} ha sido borrada'}), 200
 
 
 

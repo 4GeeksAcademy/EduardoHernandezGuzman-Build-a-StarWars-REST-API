@@ -132,15 +132,14 @@ def get_planet2(planet_id):
 
 
 
+############################# METODO POST ###################################
 
 
 
-
-
+#Crear nuevo Character
 @app.route('/character', methods=['POST'])
 def add_new_character():
     body = request.get_json()
-
     # Verificar si los datos esperados están presentes para el personaje
     if (
         "name" not in body
@@ -150,7 +149,6 @@ def add_new_character():
         or "skin_color" not in body
     ):
         return jsonify({"error": "Datos incompletos"}), 400
-
     # Crear el personaje con los datos recibidos
     new_character = Character(
         name=body["name"],
@@ -159,13 +157,42 @@ def add_new_character():
         hair_color=body["hair_color"],
         skin_color=body["skin_color"]
     )
-
     # Agregar y confirmar los cambios en la base de datos
     db.session.add(new_character)
     db.session.commit()
 
     response_body = {
-        "msg": "Nuevo personaje añadido exitosamente"
+        "msg": "Nuevo character añadido exitosamente"
+    }
+
+    return jsonify(response_body), 200
+
+
+#Crear nuevo Planet
+@app.route('/planet', methods=['POST'])
+def add_new_planet():
+    body = request.get_json()
+    
+    if (
+        "name" not in body
+        or "population" not in body
+        or "terrain" not in body
+        or "climate" not in body
+    ):
+        return jsonify({"error": "Datos incompletos"}), 400
+   
+    new_planet = Planet(
+        name=body["name"],
+        population=body["population"],
+        terrain=body["terrain"],
+        climate=body["climate"]
+    )
+    
+    db.session.add(new_planet)
+    db.session.commit()
+
+    response_body = {
+        "msg": "Nuevo planet añadido exitosamente"
     }
 
     return jsonify(response_body), 200

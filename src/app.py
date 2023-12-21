@@ -141,7 +141,7 @@ def get_planet2(planet_id):
 #Traer a los Planet_fav
 @app.route('/planet_fav', methods=['GET'])
 def get_planet_fav():
-    planets_fav = Character_fav.query.all() 
+    planets_fav = Planet_fav.query.all() 
     resultados = list(map(lambda item: item.serialize(), planets_fav))
     
     if not planets_fav:
@@ -216,6 +216,63 @@ def add_new_planet():
 
     return jsonify(response_body), 200
 
+
+
+#Crear nuevo character_fav
+@app.route('/character_fav', methods=['POST'])
+def add_new_character_fav():
+    request_body_fav_character = request.get_json()
+
+
+    if (
+        "character_id" not in request_body_fav_character
+        or "user_id" not in request_body_fav_character
+    ):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    
+    new_fav_character = Character_fav(
+        character_id=request_body_fav_character["character_id"],
+        user_id=request_body_fav_character["user_id"]
+    )
+    
+   
+    db.session.add(new_fav_character)
+    db.session.commit()
+
+    response_body = {
+        "msg": "Nuevo character_fav añadido exitosamente"
+    }
+
+    return jsonify(response_body), 200
+
+#Crear nuevo planet_fav
+@app.route('/planet_fav', methods=['POST'])
+def add_new_planet_fav():
+    request_body_fav_planet = request.get_json()
+
+
+    if (
+        "planet_id" not in request_body_fav_planet
+        or "user_id" not in request_body_fav_planet
+    ):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    
+    new_fav_planet = Planet_fav(
+        planet_id=request_body_fav_planet["planet_id"],
+        user_id=request_body_fav_planet["user_id"]
+    )
+    
+   
+    db.session.add(new_fav_planet)
+    db.session.commit()
+
+    response_body = {
+        "msg": "Nuevo planet_fav añadido exitosamente"
+    }
+
+    return jsonify(response_body), 200
 
 
 

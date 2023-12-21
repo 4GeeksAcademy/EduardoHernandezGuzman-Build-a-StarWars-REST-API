@@ -137,6 +137,56 @@ def get_planet2(planet_id):
 
 
 
+@app.route('/character', methods=['POST'])
+def add_new_character():
+    body = request.get_json()
+
+    # Verificar si los datos esperados están presentes para el personaje
+    if (
+        "name" not in body
+        or "height" not in body
+        or "mass" not in body
+        or "hair_color" not in body
+        or "skin_color" not in body
+    ):
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    # Crear el personaje con los datos recibidos
+    new_character = Character(
+        name=body["name"],
+        height=body["height"],
+        mass=body["mass"],
+        hair_color=body["hair_color"],
+        skin_color=body["skin_color"]
+    )
+
+    # Agregar y confirmar los cambios en la base de datos
+    db.session.add(new_character)
+    db.session.commit()
+
+    response_body = {
+        "msg": "Nuevo personaje añadido exitosamente"
+    }
+
+    return jsonify(response_body), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

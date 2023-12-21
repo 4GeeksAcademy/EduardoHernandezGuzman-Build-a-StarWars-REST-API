@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User , Character, Planet
+from models import db, User , Character, Planet , Character_fav , Planet_fav
 #from models import Person
 
 app = Flask(__name__)
@@ -41,6 +41,7 @@ def sitemap():
 
 
 ############################# METODO GET ###################################
+
 #Traer a los User
 @app.route('/user', methods=['GET'])
 def get_user():
@@ -82,8 +83,6 @@ def get_user_fav():
 
 
 
-
-
 #Traer a los Character
 @app.route('/character', methods=['GET'])
 def get_character():
@@ -105,6 +104,16 @@ def get_character2(character_id):
 
     return jsonify(character.serialize()), 200
 
+#Traer a los Character_fav
+@app.route('/character_fav', methods=['GET'])
+def get_character_fav():
+    characters_fav = Character_fav.query.all() 
+    resultados = list(map(lambda item: item.serialize(), characters_fav))
+    
+    if not characters_fav:
+        return jsonify(message="No se han encontrado character"), 404
+
+    return jsonify(resultados), 200
 
 
 
@@ -129,6 +138,16 @@ def get_planet2(planet_id):
 
     return jsonify(planet.serialize()), 200
 
+#Traer a los Planet_fav
+@app.route('/planet_fav', methods=['GET'])
+def get_planet_fav():
+    planets_fav = Character_fav.query.all() 
+    resultados = list(map(lambda item: item.serialize(), planets_fav))
+    
+    if not planets_fav:
+        return jsonify(message="No se han encontrado planet"), 404
+
+    return jsonify(resultados), 200
 
 
 

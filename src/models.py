@@ -58,9 +58,17 @@ class Character_fav(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     character_id = db.Column(db.Integer, db.ForeignKey("character.id"))
     user = db.relationship("User", back_populates="character_fav")
-
-    #Relación con character
     character = db.relationship("Character", back_populates="character_fav")
+
+    def __repr__(self):
+        return '<Character_fav %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "character_id": self.character_id,
+            "user_id": self.user_id,
+        }
 
 
 ############################# PLANETAS ###################################
@@ -91,6 +99,14 @@ class Planet_fav(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     planet_id = db.Column(db.Integer, db.ForeignKey("planet.id"))
     user = db.relationship("User", back_populates="planet_fav")
-
-    #Relación con planet
     planet = db.relationship("Planet", back_populates="planet_fav")
+
+    def __repr__(self):
+        return '<Planet_fav %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "planet_id": self.planet_id,
+            "user_id": self.user_id,
+        }
